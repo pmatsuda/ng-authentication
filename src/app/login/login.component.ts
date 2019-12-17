@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-//Import the service
+
 import { UserService } from '../services/user.service';
+
+// 1. Import the User object (model)
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-login',
@@ -9,14 +12,28 @@ import { UserService } from '../services/user.service';
 })
 
 export class LoginComponent implements OnInit {
+  // 2. Create a new instance of the User object
+  user: User = new User();
+  // 3. Instantiate an errors array
+  error: any;
 
-  //Inject the service into the constructor
-  constructor(private userService: UserService) {
+  // 4. Clear out the contructor login
+  constructor(private userService: UserService) { }
 
-    //Call the test method from the service
-    console.log(this.userService.test());
+  ngOnInit() { }
+
+  // 5. Add a login method
+  login(): void {
+
+    this.userService.login(this.user).subscribe(
+      (response: any) => {
+        console.log(response);
+
+        if (response.success == false) {
+          this.error = true;
+        }
+
+      }
+    );
   }
-
-  ngOnInit() {}
-
 }
